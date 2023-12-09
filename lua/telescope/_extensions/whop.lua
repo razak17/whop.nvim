@@ -6,14 +6,14 @@ local action_state = require("telescope.actions.state")
 
 local whop = require("whop")
 
-local function whop_picker()
+local function whop_picker(opts)
 	-- this is important, because picker buffer number
 	-- is different and we need to use to execute commands
 	-- in a specific buffer, which is currently open
 	local bufnr = vim.api.nvim_get_current_buf()
 
 	pickers
-		.new({}, {
+		.new(opts, {
 			prompt_title = "whop",
 			finder = finders.new_table({
 				results = whop._commands,
@@ -46,5 +46,7 @@ end
 
 return require("telescope").register_extension({
 	setup = function(ext_config, config) end,
-	exports = { whop = whop_picker },
+	exports = { whop = function (opts)
+	 whop_picker(opts)
+	end },
 })
